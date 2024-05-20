@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-// import { dataActions } from "./redux/data/slice";
-// import { useDispatch, useSelector } from "react-redux";
-// import { RootState } from "./redux/rootReducer";
+import { dataActions } from "./redux/data/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./redux/rootReducer";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import GoogleMap from "./component/GoogleMap";
 import { API_KEY } from "./constant/ApplicationConstant";
@@ -14,7 +14,7 @@ import AutoComplete from "./component/AutoComplete";
 export type Poi = { key: string; location: google.maps.LatLngLiteral };
 
 const App = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const locations: Array<Poi> = [
     { key: "KualaLumpur", location: { lat: 3.1319, lng: 101.6481 } },
@@ -32,18 +32,18 @@ const App = () => {
     }
   }, [value, inputValue]);
 
-  // useEffect(() => {
-  //   if (onFavourite) {
-  //     dispatch(
-  //       dataActions.get({
-  //         placeId: value.id,
-  //         address: value.address,
-  //         lat: 3.1319,
-  //         lng: 101.6481,
-  //       })
-  //     );
-  //   }
-  // }, [value, onFavourite]);
+  useEffect(() => {
+    if (onFavourite) {
+      dispatch(
+        dataActions.get({
+          placeId: value.id,
+          address: value.address,
+          lat: 3.1319,
+          lng: 101.6481,
+        })
+      );
+    }
+  }, [value, onFavourite]);
 
   return (
     <APIProvider apiKey={API_KEY}>
