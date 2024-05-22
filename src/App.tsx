@@ -5,15 +5,14 @@ import { RootState } from "./redux/rootReducer";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import GoogleMap from "./component/GoogleMap";
 import { API_KEY } from "./constant/ApplicationConstant";
-import {
-  ISelectedLocation,
-} from "./interfaces/GoogleMap.interfaces";
+import { ISelectedLocation } from "./interfaces/Application.interfaces";
 import FavouriteBtn from "./component/FavouriteBtn";
 import AutoComplete from "./component/AutoComplete";
 
 export type Poi = { key: string; location: google.maps.LatLngLiteral };
 
 const App = () => {
+  const { error } = useSelector((state: RootState) => state.data);
   const dispatch = useDispatch();
 
   const locations: Array<Poi> = [
@@ -23,6 +22,8 @@ const App = () => {
   const [value, setValue] = useState<ISelectedLocation>({
     id: "",
     address: "",
+    lat: 3.1319,
+    lng: 101.6481,
   });
   const [inputValue, setInputValue] = useState("");
 
@@ -38,8 +39,8 @@ const App = () => {
         dataActions.get({
           placeId: value.id,
           address: value.address,
-          lat: 3.1319,
-          lng: 101.6481,
+          latitude: value.lat,
+          longitude: value.lng,
         })
       );
     }
@@ -59,9 +60,11 @@ const App = () => {
             setOnFavourite={setOnFavourite}
             value={value}
             inputValue={inputValue}
+            error={error}
           />
         </div>
-        <GoogleMap locations={locations} />
+        {/* {error && <div>{error}</div>} */}
+        <GoogleMap locations={locations} value={value} />
       </div>
     </APIProvider>
   );
